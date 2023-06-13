@@ -56,15 +56,8 @@ export async function loadCommands(client: ExtendedClient): Promise<void> {
 
     const rest = new REST({ version: '10' }).setToken(config.bot.token)
     try {
-        if (commands.length) {
-            await rest.put(
-                Routes.applicationCommands(config.bot.application_id),
-                { body: commands },
-            )
-        }
+        if (commands.length) await rest.put(Routes.applicationCommands(config.bot.application_id), { body: commands })
     } catch (error) {
         console.error('Failed to register application commands:', error)
     }
-
-    console.log(client.commands)
 }

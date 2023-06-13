@@ -1,9 +1,9 @@
 import { table } from 'table'
-import { Client } from 'discord.js'
 import { readdirSync, statSync } from 'fs'
 import { join } from 'path'
+import { ExtendedClient } from '../classes/extendedClient'
 
-function loadEvent(client: Client, filePath: string): string[] {
+function loadEvent(client: ExtendedClient, filePath: string): string[] {
     const event = require(filePath).default
 
     if (!event.disabled) {
@@ -14,7 +14,7 @@ function loadEvent(client: Client, filePath: string): string[] {
     return [event.name, event.description, event.rest ? '✅' : '❌', event.once ? '✅' : '❌', event.disabled ? '❌' : '✅']
 }
 
-function loadDirectory(client: Client, directory: string): string[][] {
+function loadDirectory(client: ExtendedClient, directory: string): string[][] {
     let data = []
 
     const files = readdirSync(directory)
@@ -32,7 +32,7 @@ function loadDirectory(client: Client, directory: string): string[][] {
     return data
 }
 
-export function loadEvents(client: Client): void {
+export function loadEvents(client: ExtendedClient): void {
     const events = loadDirectory(client, join(__dirname, '../events'))
     let data: string[][]
 

@@ -1,13 +1,21 @@
-import { SlashCommandBuilder, ChatInputCommandInteraction, Client } from 'discord.js'
+import { SlashCommandBuilder, ChatInputCommandInteraction, Client, EmbedBuilder } from 'discord.js'
 
 export default {
     data: new SlashCommandBuilder()
         .setName('ping')
         .setDescription('Replies with bot latency and API latency'),
     async execute(interaction: ChatInputCommandInteraction, client: Client) {
-        await interaction.reply({
-            content: `🏓 Pong! Latency is ${Date.now() - interaction.createdTimestamp}ms. API Latency is ${Math.round(client.ws.ping)}ms`,
-            ephemeral: true
-        })
+        const now = Date.now()
+
+        const embed = new EmbedBuilder()
+            .setTitle('🏓 Pong!')
+            .setDescription(`
+                Bot latency: ${now - interaction.createdTimestamp}ms
+                API latency: ${client.ws.ping}ms
+            `)
+            .setColor('Random')
+            .setTimestamp()
+
+        await interaction.reply({ embeds: [embed], ephemeral: true })
     }
 }

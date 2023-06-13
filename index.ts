@@ -40,6 +40,8 @@ const client = new ExtendedClient({
     partials,
 })
 
+console.clear()
+
 loadEvents(client)
 
 client.login(config.bot.token)
