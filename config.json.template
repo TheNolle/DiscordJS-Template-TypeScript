@@ -2,5 +2,11 @@
     "bot": {
         "application_id": "your_bot_application_id",
         "token": "your_bot_token",
-    }
+    },
+    "developers": [
+        {
+            "name": "your_name",
+            "id": "your_id"
+        }
+    ]
 }
