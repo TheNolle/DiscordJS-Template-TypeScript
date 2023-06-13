@@ -1,5 +1,6 @@
 import { Client, GatewayIntentBits, Partials } from 'discord.js'
 import config from './config.json'
+import { loadEvents } from './handlers/events'
 
 const intents = [
     GatewayIntentBits.AutoModerationConfiguration,
@@ -35,14 +36,6 @@ const partials = [
 
 const client = new Client({ intents, partials })
 
-client.once('ready', () => {
-    console.log(`Logged in as ${client.user?.tag} !`)
-})
-
-client.on('messageCreate', message => {
-    if (message.content.toLowerCase() === `hello!`) {
-        message.channel.send('Hi!')
-    }
-})
+loadEvents(client)
 
 client.login(config.bot.token)
