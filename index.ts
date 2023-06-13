@@ -36,7 +36,7 @@ const partials = [
 const client = new Client({ intents, partials })
 
 client.once('ready', () => {
-    console.log(`Logged in as ${client.user?.tag}!`)
+    console.log(`Logged in as ${client.user?.tag} !`)
 })
 
 client.on('messageCreate', message => {
