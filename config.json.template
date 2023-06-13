@@ -8,5 +8,6 @@
             "name": "your_name",
             "id": "your_id"
         }
-    ]
+    ],
+    "mongodb": "your_mongodb_url"
 }
