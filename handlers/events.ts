@@ -7,26 +7,15 @@ function loadEvent(client: Client, filePath: string): string[] {
     const event = require(filePath).default
 
     if (!event.disabled) {
-        if (event.once) {
-            if (event.rest) {
-                client.once(event.name, (...args) => event.execute(...args))
-            } else {
-                client.once(event.name, () => event.execute(client))
-            }
-        } else {
-            if (event.rest) {
-                client.on(event.name, (...args) => event.execute(...args))
-            } else {
-                client.on(event.name, () => event.execute(client))
-            }
-        }
+        if (event.rest) event.once ? client.rest.once(event.name, (...args) => event.execute(...args)) : client.rest.on(event.name, () => event.execute(client))
+        else event.once ? client.once(event.name, (...args) => event.execute(...args)) : client.on(event.name, () => event.execute(client))
     }
 
-    return [event.name, event.description, event.rest ? 'Yes' : 'No', event.once ? 'Yes' : 'No', event.disabled ? '❌' : '✅']
+    return [event.name, event.description, event.rest ? '❌' : '✅', event.once ? '❌' : '✅', event.disabled ? '❌' : '✅']
 }
 
 function loadDirectory(client: Client, directory: string): string[][] {
-    let data = [['Name', 'Description', 'Rest', 'Once', 'Status']]
+    let data = []
 
     const files = readdirSync(directory)
 
@@ -44,7 +33,7 @@ function loadDirectory(client: Client, directory: string): string[][] {
 }
 
 export function loadEvents(client: Client): void {
-    const data = loadDirectory(client, join(__dirname, '../events'))
+    const data = [['Name', 'Description', 'Rest', 'Once', 'Status'], ...loadDirectory(client, join(__dirname, '../events'))]
 
     console.log(table(data))
 }

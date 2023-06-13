@@ -4,7 +4,6 @@ export default {
     name: Events.ClientReady,
     description: 'Emitted when the client becomes ready to start working',
     once: true,
-    disabled: true,
     /**
      * @param {Client} client
      */
