@@ -1,5 +1,5 @@
 import { table } from 'table'
-import { REST, Routes, SlashCommandBuilder } from 'discord.js'
+import { REST, Routes } from 'discord.js'
 import { ExtendedClient } from '../classes/extendedClient'
 import { readdirSync, statSync } from 'fs'
 import { join } from 'path'
@@ -10,17 +10,8 @@ async function loadCommand(filePath: string, client: ExtendedClient): Promise<an
     const command = commandModule.default
 
     if (!command.disabled) {
-        const slashCommand = new SlashCommandBuilder()
-            .setName(command.data.name)
-            .setDescription(command.data.description)
-
-        command.data.options?.forEach((option: any) => {
-            slashCommand.addSubcommand(option)
-        })
-
         client.commands.set(command.data.name, command)
-
-        return slashCommand.toJSON()
+        return command.data.toJSON()
     }
 }
 
@@ -47,17 +38,12 @@ export async function loadCommands(client: ExtendedClient): Promise<void> {
     client.commands.clear()
     const commands = await loadDirectory(join(__dirname, '../commands'), client)
     let data: string[][]
-    if (commands.length) {
-        data = [['Name', 'Description', 'Status'], ...commands.map(command => [command.name, command.description, command.disabled ? '❌' : '✅'])]
-        console.log(table(data))
-    } else {
-        console.log("No command found in the commands folder")
-    }
+    if (commands.length) data = [['Name', 'Description', 'Status'], ...commands.map(command => [command.name, command.description, command.disabled ? '❌' : '✅'])]
+    else data = [['No event found in the events folder']]
+
+    console.log(table(data))
 
     const rest = new REST({ version: '10' }).setToken(config.bot.token)
-    try {
-        if (commands.length) await rest.put(Routes.applicationCommands(config.bot.application_id), { body: commands })
-    } catch (error) {
-        console.error('Failed to register application commands:', error)
-    }
+    try { if (commands.length) await rest.put(Routes.applicationCommands(config.bot.application_id), { body: commands }) }
+    catch (error) { console.error('Failed to register application commands:', error) }
 }
